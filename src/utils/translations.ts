@@ -89,28 +89,28 @@ export const translations: Record<Language, TranslationDict> = {
     },
     projectsList: [
       {
-        title: 'AI 智慧助理系統 ｜ AI Assistant Platform',
-        description: '基於 Django 與 OpenAI/Gemini API 打造的智慧助理平台。後端採用 RESTful API 設計，前端結合 React 實現流暢的對話介面，並支援動態對話紀錄與 Markdown 渲染。',
-        tags: ['Django', 'React', 'TypeScript', 'LLM API'],
-        role: '全端開發 ｜ Full-Stack Developer',
-      },
-      {
-        title: '高科大校園公車即時追蹤系統 ｜ NKUST Bus Tracker',
-        description: '專為高科大學生設計的跨平台 App，基於 Flutter 與 Google Maps API 實現校園接駁公車即時定位、到站預估與班次查詢，解決學生往返不同校區的通勤痛點。',
-        tags: ['Flutter', 'Dart', 'Google Maps API', 'Firebase'],
-        role: '行動 App 開發 ｜ Mobile Developer',
-      },
-      {
         title: '個人極簡動態作品集網站 ｜ Hong.dev Portfolio',
         description: '使用 React、Vite、TypeScript 與 Tailwind CSS 建構的個人作品集網站。整合 HTML5 Canvas 實現隨滑鼠游標拖曳互動的線條網格，並支援完整的中英文語系切換與排版優化。',
-        tags: ['React', 'Vite', 'Tailwind CSS', 'Canvas API'],
+        tags: ['React', 'Vite', 'TypeScript', 'Tailwind CSS'],
         role: '前端網頁設計 ｜ Frontend Developer',
       },
       {
-        title: '資管學術專案：校園活動資料庫系統 ｜ Database System',
-        description: '高科大資管系核心課程專案。進行完整系統分析與設計（SA&D），繪製 ER 圖及進行正規化，使用 SQL 實作資料庫與預存程序，提升校園活動報名管理效率。',
-        tags: ['SQL', 'Database Design', 'System Analysis'],
-        role: '資料庫設計與分析 ｜ DB Designer',
+        title: '專案項目二 ｜ Project 02',
+        description: '本專案尚在開發階段，相關專案內容尚未上傳，敬請期待！',
+        tags: ['Coming Soon', 'Under Dev'],
+        role: '專案開發 ｜ Developer',
+      },
+      {
+        title: '專案項目三 ｜ Project 03',
+        description: '本專案尚在開發階段，相關專案內容尚未上傳，敬請期待！',
+        tags: ['Coming Soon', 'Under Dev'],
+        role: '專案開發 ｜ Developer',
+      },
+      {
+        title: '專案項目四 ｜ Project 04',
+        description: '本專案尚在開發階段，相關專案內容尚未上傳，敬請期待！',
+        tags: ['Coming Soon', 'Under Dev'],
+        role: '專案開發 ｜ Developer',
       },
     ],
     experiencesList: [
@@ -188,28 +188,28 @@ export const translations: Record<Language, TranslationDict> = {
     },
     projectsList: [
       {
-        title: 'AI Assistant Platform (Django + React)',
-        description: 'An AI-powered conversation platform built on Django and OpenAI/Gemini API. Implemented RESTful APIs for history log management, and built a dynamic frontend using React for chat, rendering markdown, and streaming responses.',
-        tags: ['Django', 'React', 'TypeScript', 'LLM API'],
-        role: 'Full-Stack Developer',
-      },
-      {
-        title: 'NKUST Campus School Bus Tracker (Flutter)',
-        description: 'A cross-platform mobile application developed for NKUST students. Integrates Google Maps API and Firebase for real-time campus shuttle bus positioning, ETA, and bus schedules, reducing student commuting stress.',
-        tags: ['Flutter', 'Dart', 'Google Maps API', 'Firebase'],
-        role: 'Mobile Developer',
-      },
-      {
         title: 'Minimalist Dynamic Portfolio (Hong.dev)',
         description: 'A personal developer portfolio site made with React, Vite, TypeScript, and Tailwind CSS. Featuring an interactive HTML5 Canvas background grid that warps on mouse hover, and optimized Chinese/English typography toggles.',
-        tags: ['React', 'Vite', 'Tailwind CSS', 'Canvas API'],
+        tags: ['React', 'Vite', 'TypeScript', 'Tailwind CSS'],
         role: 'Frontend Developer',
       },
       {
-        title: 'Academic Database Registration System',
-        description: 'NKUST Information Management course project. Conducted system analysis & design (SA&D), normalized relations, drew ERD, and wrote SQL databases and stored procedures to handle event registrations.',
-        tags: ['SQL', 'Database Design', 'System Analysis'],
-        role: 'Database Designer & Analyst',
+        title: 'Project 02',
+        description: 'This project is currently under development. Content has not been uploaded yet. Stay tuned!',
+        tags: ['Coming Soon', 'Under Dev'],
+        role: 'Developer',
+      },
+      {
+        title: 'Project 03',
+        description: 'This project is currently under development. Content has not been uploaded yet. Stay tuned!',
+        tags: ['Coming Soon', 'Under Dev'],
+        role: 'Developer',
+      },
+      {
+        title: 'Project 04',
+        description: 'This project is currently under development. Content has not been uploaded yet. Stay tuned!',
+        tags: ['Coming Soon', 'Under Dev'],
+        role: 'Developer',
       },
     ],
     experiencesList: [
