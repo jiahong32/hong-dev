@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found | Hong.dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'JetBrains Mono', system-ui, -apple-system, sans-serif;
+        background-color: #ffffff;
+        color: #0f172a;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+      }
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .container {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        padding: 2rem;
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(59, 130, 246, 0.08);
+        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.03);
+        max-width: 90%;
+        width: 460px;
+      }
+      h1 {
+        font-size: clamp(5rem, 12vw, 8rem);
+        font-weight: 800;
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        color: #0f172a;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
+      }
+      h1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 20%;
+        width: 60%;
+        height: 3px;
+        background-color: #2563eb;
+      }
+      p.error-code {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.35em;
+        color: #2563eb;
+        margin-bottom: 0.5rem;
+      }
+      p.description {
+        font-size: 0.85rem;
+        font-weight: 300;
+        color: #475569;
+        line-height: 1.6;
+        margin-top: 1rem;
+        letter-spacing: 0.02em;
+      }
+      .home-btn {
+        display: inline-block;
+        margin-top: 2.5rem;
+        padding: 0.85rem 2rem;
+        border: 1px solid #bfdbfe;
+        color: #334155;
+        text-decoration: none;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        transition: all 0.25s ease;
+        background-color: #ffffff;
+      }
+      .home-btn:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <div class="container">
+      <p class="error-code">Error 404</p>
+      <h1>404</h1>
+      <p class="description">
+        PAGE NOT FOUND<br />
+        您所尋找的頁面不存在或已被移除。
+      </p>
+      <a href="/hong-dev/" class="home-btn">回到首頁 ｜ Return Home</a>
+    </div>
+
+    <script>
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      let points = [];
+      let animationFrameId;
+      
+      const mouse = { x: null, y: null };
+      const spacing = 50; // Grid spacing
+      const maxRadius = 130; // Push radius
+      const springStiffness = 0.008; // Spring pull back strength
+      const friction = 0.92; // Particle damping/slowing down
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initGrid();
+      }
+
+      function initGrid() {
+        points = [];
+        const cols = Math.ceil(canvas.width / spacing) + 1;
+        const rows = Math.ceil(canvas.height / spacing) + 1;
+
+        for (let r = 0; r < rows; r++) {
+          const rowPoints = [];
+          for (let c = 0; c < cols; c++) {
+            const x = c * spacing;
+            const y = r * spacing;
+            rowPoints.push({
+              x: x + (Math.random() - 0.5) * 15, // start slightly scattered / "broken"
+              y: y + (Math.random() - 0.5) * 15,
+              homeX: x,
+              homeY: y,
+              vx: 0,
+              vy: 0
+            });
+          }
+          points.push(rowPoints);
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const cols = points[0] ? points[0].length : 0;
+        const rows = points.length;
+
+        // 1. Update velocities and positions
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const p = points[r][c];
+
+            // Spring force back to home position
+            const ax = (p.homeX - p.x) * springStiffness;
+            const ay = (p.homeY - p.y) * springStiffness;
+            p.vx += ax;
+            p.vy += ay;
+
+            // Mouse push force (repulsion)
+            if (mouse.x !== null && mouse.y !== null) {
+              const dx = p.x - mouse.x;
+              const dy = p.y - mouse.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+
+              if (dist < maxRadius) {
+                const force = (maxRadius - dist) / maxRadius; // 0 to 1
+                const angle = Math.atan2(dy, dx);
+                // Push particles away
+                p.vx += Math.cos(angle) * force * 1.8;
+                p.vy += Math.sin(angle) * force * 1.8;
+              }
+            }
+
+            // Apply friction and update position
+            p.vx *= friction;
+            p.vy *= friction;
+            p.x += p.vx;
+            p.y += p.vy;
+          }
+        }
+
+        // 2. Draw broken mesh grid lines
+        ctx.lineWidth = 0.8;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const p1 = points[r][c];
+
+            // Connect horizontally
+            if (c + 1 < cols) {
+              const p2 = points[r][c + 1];
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              
+              let opacity = 0.04;
+              if (mouse.x !== null && mouse.y !== null) {
+                const dx = mouse.x - (p1.x + p2.x) / 2;
+                const dy = mouse.y - (p1.y + p2.y) / 2;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < maxRadius) {
+                  const force = (maxRadius - dist) / maxRadius;
+                  opacity = 0.04 + force * 0.18;
+                }
+              }
+              ctx.strokeStyle = `rgba(37, 99, 235, ${opacity})`;
+              ctx.stroke();
+            }
+
+            // Connect vertically
+            if (r + 1 < rows) {
+              const p3 = points[r + 1][c];
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p3.x, p3.y);
+              
+              let opacity = 0.04;
+              if (mouse.x !== null && mouse.y !== null) {
+                const dx = mouse.x - (p1.x + p3.x) / 2;
+                const dy = mouse.y - (p1.y + p3.y) / 2;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < maxRadius) {
+                  const force = (maxRadius - dist) / maxRadius;
+                  opacity = 0.04 + force * 0.18;
+                }
+              }
+              ctx.strokeStyle = `rgba(37, 99, 235, ${opacity})`;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // 3. Draw cursor indicator
+        if (mouse.x !== null && mouse.y !== null) {
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(37, 99, 235, 0.3)';
+          ctx.fill();
+        }
+
+        animationFrameId = requestAnimationFrame(draw);
+      }
+
+      function handleMouseMove(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      }
+
+      function handleTouchMove(e) {
+        if (e.touches.length > 0) {
+          mouse.x = e.touches[0].clientX;
+          mouse.y = e.touches[0].clientY;
+        }
+      }
+
+      function handleMouseLeave() {
+        mouse.x = null;
+        mouse.y = null;
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseleave', handleMouseLeave);
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', handleMouseLeave);
+
+      resizeCanvas();
+      draw();
+    </script>
+  </body>
+</html>
